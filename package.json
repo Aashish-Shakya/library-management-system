@@ -1,0 +1,26 @@
+{
+  "name": "library-management-system",
+  "version": "1.0.0",
+  "description": "This is a book record managment API Backend for managment of records and books build with nodejs and express.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aashish-Shakya/library-management-system.git"
+  },
+  "author": "Aashish Shakya",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aashish-Shakya/library-management-system/issues"
+  },
+  "homepage": "https://github.com/Aashish-Shakya/library-management-system#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.19"
+  }
+}
