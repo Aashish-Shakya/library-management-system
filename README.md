@@ -1,6 +1,9 @@
 # library-management-system
 This is a book record managment API Backend for managment of records and books build with nodejs and express
 
+
+# API Documentation link
+https://documenter.getpostman.com/view/23027931/VUxPtSFH
 # Routes and Endpoints
 ## /users
 POST: Create a new user
@@ -20,8 +23,8 @@ GET: Get user subscription details
 4. 
 
 ## /books
-GET: Get list of all books
-POST: Create a new Book
+GET: Get list of all books ✅
+POST: Create a new Book ✅
 
 ## /books/{id}
 GET : Get book by id
