@@ -2,6 +2,12 @@ const { application } = require("express");
 const express = require("express");
 // Imported JSOn Data
 const { users } = require('./data/users.json')
+
+// Importing Routes
+
+const usersRouter = require("./routes/users")
+const booksRouter = require("./routes/books")
+
 const app = express();
 const PORT = 8081;
 
@@ -13,119 +19,9 @@ app.get("/", (req, res) => {
     });
 });
 
-
-/** 
-Route: /users
-Method : GET
-Description: Get all users
-Access: Public
-Parameters: None
-*/
-
-app.get("/users", (req, res) => {
-    res.status(200).json({
-        success: true,
-        data: users,
-    })
-})
-
-
-/** 
-Route: /users/:id
-Method : GET
-Description: Get single user by its id
-Access: Public
-Parameters: id
-*/
-
-app.get("/users/:id", (req, res) => {
-
-    const { id } = req.params;
-    // console.log({ id })
-    const user = users.find((each) => each.id === id);
-    if (!user) {
-        return res.status(404).json({
-            success: false,
-            message: "User not found"
-        });
-    };
-
-    res.status(200).json({
-        success: true,
-        data: user,
-        // })
-    })
-});
-
-
-/** 
-Route: /users 
-Method : POST
-Description: Create new user
-Access: Public
-Parameters: none
-*/
-
-app.post('/users', (req, res) => {
-    const { id, name, surname, email, subscriptionType, subscriptionDate } = req.body;
-
-    const user = users.find((each) => each.id === id);
-
-    if (user) {
-        return res.status(404).json({
-            success: false,
-            message: "User already exists with this id"
-        });
-    }
-    users.push({
-        id,
-        name,
-        surname,
-        email,
-        subscriptionType,
-        subscriptionDate
-    });
-    return res.status(201).json({
-        success: true,
-        message: "User created successfully",
-        data: user,
-
-    })
-});
-
-
-
-/** 
-Route: /users/:id 
-Method : PUT
-Description: Updating a user
-Access: Public
-Parameters: id
-*/
-
-
-app.put('/users/:id', (req, res) => {
-    const { id } = req.params;
-    const { data } = req.body;
-    const user = users.find((each) => each.id === id);
-
-    if (!user)
-        return res.status(404).json({ success: false, message: "User not found with this id" });
-
-    const updatedUser = users.map((each) => {
-        if (each.id === id) {
-            return {
-                ...each,
-                ...data,
-            };
-        }
-        return each;
-    });
-    return res.status(200).json({
-        success: true,
-        data: updatedUser,
-    })
-});
+//If there any request if '/this' , then take to this,,)
+app.use('/users', usersRouter);
+app.use('/books', booksRouter);
 
 
 app.get("*", (req, res) => {
@@ -139,3 +35,6 @@ app.listen(PORT, () => {
 })
 
 // https://documenter.getpostman.com/view/23027931/VUxPtSFH
+
+
+//Now we are going to break our codes in multiple files for high readbility
