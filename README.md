@@ -14,7 +14,7 @@ GET:  Get all list of users ✅
 ## /users/{id}
 GET: Get a user by id ✅
 PUT: Update a user by id ✅
-DELETE: Delete a user by Id (only if user return all the books or not ...)(is there any fne need to pay?..)
+DELETE: Delete a user by Id ✅ (only if user return all the books or not ...)(is there any fne need to pay?..)
 
 
 ## /users/subscription-details/{id}
@@ -29,18 +29,18 @@ GET: Get list of all books ✅
 POST: Create a new Book ✅
 
 ## /books/{id}
-GET : Get book by id
-PUT: Update a book by id
+GET : Get book by id✅
+PUT: Update a book by id✅
 <!-- DELETE: Delete a book by id. -->
 
 ## /books/issued/by-user
-GET: Get all issued books
+GET: Get all issued books✅
 
-## /books/issued/withFine
+## /books/issued/withFine  --> Hw
 GET: Get all issued book with fine
 
 # Subscription Types
-
+NOTE: //date month day year
 BASIC --> 3 Months
 STAND. --> 6 Months
 PREMIMUM --> 12 Months

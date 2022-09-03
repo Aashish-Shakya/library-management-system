@@ -111,15 +111,25 @@ Method : POST
 Description: Add/create new book
 Access: Public
 Parameters: none
+
+Data: id, name, author, genre, price, publisher
 */
 
 
 
 
 router.post('/', (req, res) => {
-    const { id, name, author, genre, price, publisher } = req.body;
+    // const { id, name, author, genre, price, publisher } = req.body;
 
-    const book = books.find((each) => each.id === id);
+    const { data } = req.body;
+
+    if (!data) {
+        return res.status(400).json({
+            success: false,
+            message: "No data Provided;"
+        });
+    }
+    const book = books.find((each) => each.id === data.id);
 
     if (book) {
         return res.status(404).json({
@@ -127,18 +137,20 @@ router.post('/', (req, res) => {
             message: "book already exists with this id"
         });
     }
-    books.push({
-        id,
-        name,
-        surname,
-        email,
-        subscriptionType,
-        subscriptionDate
-    });
+    // books.push({
+    //     id,
+    //     name,
+    //     surname,
+    //     email,
+    //     subscriptionType,
+    //     subscriptionDate
+    // });
+
+    const allBooks = [...books, data];
     return res.status(201).json({
         success: true,
         message: "book created successfully",
-        data: book,
+        data: allBooks,
 
     })
 });
@@ -150,6 +162,7 @@ Route: /books/:id
 Method : PUT
 Description: Updating a book
 Access: Public
+Data: id, name, author, genre, price, publisher
 Parameters: id
 */
 
@@ -205,6 +218,65 @@ router.delete('/:id', (req, res) => {
         data: books
     });
 });
+
+
+/**
+ * Route: /books/issued/with-fine
+ * Method: GET
+ * Description: Get issued books with fine
+ * Access: Public
+ * Parameters: none
+ */
+
+router.get("/issued/with-fine", (req, res) => {
+    const usersWithIssuedBooksWithFine = users.filter((each) => {
+        if (each.issuedBook) return each;
+    });
+
+    const issuedBooksWithFine = [];
+
+    usersWithIssuedBooksWithFine.forEach((each) => {
+        const book = books.find((book) => book.id === each.issuedBook);
+
+        book.issuedBy = each.name;
+        book.issuedDate = each.issuedDate;
+        book.returnDate = each.returnDate;
+
+
+        const getDateInDays = (data = "") => {
+            let date;
+            if (data === "") {
+                date = new Date();
+            } else {
+                date = new Date(data);
+            }
+            let days = Math.floor(date / (1000 * 60 * 60 * 24)); //1000 is for milliseconds
+            return days;
+        };
+
+        let returnDate = getDateInDays(each.returnDate);
+
+        let currentDate = getDateInDays();
+
+        if (returnDate < currentDate) {
+            issuedBooksWithFine.push(book);
+        }
+    });
+
+    if (issuedBooksWithFine.length === 0) {
+        return res.status(404).json({
+            Success: false,
+            Message: "No books which have fine",
+        });
+    }
+
+    return res.status(200).json({
+        Success: true,
+        Message: "Issued Books List which have fine",
+        Data: issuedBooksWithFine,
+    })
+});
+
 
 
 //default export
