@@ -1,5 +1,5 @@
 const { BookModel, UserModel } = require("../models");
-const IssuedBook = require("./dtos/book-dto");
+const IssuedBook = require("../dtos/book-dto");
 
 exports.getAllBooks = async (req, res) => {
     //Fire a query to find all books in database
@@ -40,7 +40,7 @@ exports.getSingleBookById = async (req, res) => {
 exports.getAllIssuedBooks = async (req, res) => {
     //to find user having issued book parameter.
     const users = await UserModel.find({
-        issuedBook: { $exist: true },
+        issuedBook: { $exists: true },
     }).populate("issuedBook")
 
 
@@ -76,6 +76,67 @@ exports.getAllIssuedBooks = async (req, res) => {
 
 
 
+exports.addNewBook = async (req, res) => {
+
+    const { data } = req.body;
+
+    if (!data) {
+        return res.status(400).json({
+            success: false,
+            message: "No data Provided;"
+        });
+    }
+
+    await BookModel.create(data);
+
+    // if (book) {
+    //     return res.status(404).json({
+    //         success: false,
+    //         message: "book already exists with this id"
+    //     });
+    // }
+
+
+    const allBooks = await BookModel.find();
+
+    return res.status(201).json({
+        success: true,
+        message: "book created successfully",
+        data: allBooks,
+
+    })
+};
+
+
+exports.updateBookById = async (req, res) => {
+    const { id } = req.params;
+    const { data } = req.body;
+    // const book = books.find((each) => each.id === id);
+
+
+    const updatedBook = await BookModel.findOneAndUpdate(
+        {
+            _id: id
+        }, data,
+        { new: true, });
+
+    // if (!book)
+    //     return res.status(404).json({ success: false, message: "book not found with this id" });
+
+    // const updatedbook = books.map((each) => {
+    //     if (each.id === id) {
+    //         return {
+    //             ...each,
+    //             ...data,
+    //         };
+    //     }
+    //     return each;
+    // });
+    return res.status(200).json({
+        success: true,
+        data: updatedBook,
+    })
+};
 
 
 
@@ -85,4 +146,26 @@ exports.getAllIssuedBooks = async (req, res) => {
 
 
 
+// Additional Route
+exports.getSingleBookByName = async (req, res) => {
 
+    const { name } = req.params;
+    // console.log({ id })
+    // const book = books.find((each) => each.id === id);
+    const book = await BookModel.findOne({
+        name: name
+    });
+    console.log(name);
+    if (!book) {
+        return res.status(404).json({
+            success: false,
+            message: "Book not found"
+        });
+    };
+
+    res.status(200).json({
+        success: true,
+        data: book
+
+    })
+};

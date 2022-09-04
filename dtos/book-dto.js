@@ -23,4 +23,3 @@ class IssuedBook {
 }
 
 module.exports = IssuedBook;
-Footer
